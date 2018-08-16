@@ -2,13 +2,10 @@ package com.misha.alexadiscord;
 
 import com.misha.alexadiscord.util.BotUtil;
 import com.misha.alexadiscord.util.QuoteUtil;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
+import sx.blah.discord.handle.impl.events.guild.member.NicknameChangedEvent;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.MessageBuilder;
 
@@ -24,7 +21,7 @@ public class AnnotationListener {
 
     }
 
-    @EventSubscriber
+
     public void onMessageReceivedEvent(MessageReceivedEvent event) throws InterruptedException  { // This method is NOT called because it doesn't have the @EventSubscriber annotation
 //        if(event.getMessage().getAuthor().getName().equals("StarUnicorn")) {
 //            event.getMessage().delete();
@@ -57,9 +54,8 @@ public class AnnotationListener {
             }
         }
         else if(message.equals("!play despacito")){
-            AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
-            AudioSourceManagers.registerRemoteSources(playerManager);
-            AudioPlayer player = playerManager.createPlayer();
+
+
 //            player.playTrack();
 //            playerManager.loadItemOrdered()
 

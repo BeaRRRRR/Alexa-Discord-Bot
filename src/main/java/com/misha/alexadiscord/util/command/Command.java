@@ -7,6 +7,6 @@ import java.util.List;
 @FunctionalInterface
 public interface Command {
 
-    void execute(MessageReceivedEvent event, List<String> ars);
+    void execute(MessageReceivedEvent event, List<String> args);
 
 }

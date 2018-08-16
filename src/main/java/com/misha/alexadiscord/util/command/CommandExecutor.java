@@ -2,26 +2,35 @@ package com.misha.alexadiscord.util.command;
 
 import com.misha.alexadiscord.util.BotUtil;
 import com.misha.alexadiscord.util.QuoteUtil;
+import com.misha.alexadiscord.util.audio.AudioUtil;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.handle.obj.IVoiceChannel;
 import sx.blah.discord.util.MessageBuilder;
+import sx.blah.discord.util.PermissionUtils;
 
 import java.util.*;
 
 public class CommandExecutor {
 
     private Map<String, Command> commandMap = new HashMap<>();
+    private AudioUtil audioUtil = AudioUtil.getInstance();
 
     private String action = "";
     private String randomQuote = "";
 
 
     {
-        commandMap.put("help", ((event, ars) -> {
-            BotUtil.sendMessage(event.getChannel(), "!help - help \n !typerace_en - A type race with English quotes \n !typerace_ru - кто быстрее напишет цитаты на русском языке");
+        commandMap.put("help", ((event, args) -> {
+            BotUtil.sendMessage(event.getChannel(), "!help - help " +
+                    "\n !typerace_en - A type race with English quotes " +
+                    "\n !typerace_ru - кто быстрее напишет цитаты на русском языке " +
+                    "\n !play url - play song from url" +
+                    "\n !skip - skip current playing song " +
+                    "\n call - invite somebody to play");
         }));
-        commandMap.put("typerace_en", (event, ars) -> {
+        commandMap.put("typerace_en", (event, args) -> {
             action = "typerace_en";
             randomQuote = QuoteUtil.getRandomQuote("en");
             BotUtil.sendMessage(event.getChannel(), "You need to type " + "\n" + randomQuote);
@@ -40,7 +49,7 @@ public class CommandExecutor {
             }
             BotUtil.sendMessage(event.getChannel(), "GO");
         });
-        commandMap.put("typerace_ru", (event, ars) -> {
+        commandMap.put("typerace_ru", (event, args) -> {
             action = "typerace_ru";
             randomQuote = QuoteUtil.getRandomQuote("ru");
             BotUtil.sendMessage(event.getChannel(), "Вам нужно написать " + "\n" + randomQuote);
@@ -60,7 +69,7 @@ public class CommandExecutor {
             BotUtil.sendMessage(event.getChannel(), "Вперёд");
 
         });
-        commandMap.put("call", (event, ars) -> {
+        commandMap.put("call", (event, args) -> {
             List<IUser> mentions = event.getMessage().getMentions();
 
             for (IUser user : mentions) {
@@ -83,6 +92,19 @@ public class CommandExecutor {
                 }
             }
         });
+        commandMap.put("set_nickname",(event, args) -> {
+            List<IUser> mentions = event.getMessage().getMentions();
+            event.getGuild().setUserNickname(mentions.get(0),args.get(1));
+        });
+        commandMap.put("play",(event, args) -> {
+            IVoiceChannel userVoiceChannel = event.getMessage().getAuthor().getVoiceStateForGuild(event.getGuild()).getChannel();
+            userVoiceChannel.join();
+            audioUtil.loadAndPlay(event.getMessage().getChannel(), args.get(0));
+        });
+        commandMap.put("skip",(event, args) -> {
+            audioUtil.skipTrack(event.getChannel());
+        });
+
 
 
     }
