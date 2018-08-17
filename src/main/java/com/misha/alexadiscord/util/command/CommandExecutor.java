@@ -104,6 +104,10 @@ public class CommandExecutor {
         commandMap.put("skip",(event, args) -> {
             audioUtil.skipTrack(event.getChannel());
         });
+        commandMap.put("coinflip",(event, args) -> {
+            String flip = new Random().nextInt(1)==1 ? "heads" : "tails";
+            BotUtil.sendMessage(event.getChannel(),"coin flipped on " + flip);
+        });
 
 
 
